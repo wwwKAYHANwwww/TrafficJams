@@ -1,7 +1,7 @@
 from ITimeDependent import ITimeDependent
 
 class Car(ITimeDependent):
-    def __init__(self,v0,x0,targetVelocity,name,frontCar):  #Constractor of the class
+    def __init__(self,v0,x0,targetVelocity,name,frontCar=None):  #Constractor of the class
         self.v0=v0                                          #Initial Velocity
         self.x0=x0                                          #Initial Position
         self.x=0                                            #???
