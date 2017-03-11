@@ -19,5 +19,8 @@ cars[0].frontCar=cars[-1]
 for i in cars:
     print(i.name,i.frontCar.name)
 
+def updateFrontCars():                              #Should be defined
+    pass
 
+updateFrontCars()
 clock.start()
