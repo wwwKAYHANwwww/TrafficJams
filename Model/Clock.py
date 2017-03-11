@@ -12,5 +12,5 @@ class Clock(object):
     def start(self):   
         for t in np.arange(0,self.finalTime,self.timeStep):
             for i in self.listeners:
-                i.update(t)
+                i.update(t,self.timeStep)
         
