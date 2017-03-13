@@ -9,6 +9,9 @@ class Clock(object):
     def addListener(self,timeDependent):
         self.listeners.append(timeDependent)
     
+    def removeListener(self,timeDependent):
+        self.listeners.remove(timeDependent)
+    
     def start(self):   
         for t in np.arange(0,self.finalTime,self.timeStep):
             for i in self.listeners:
