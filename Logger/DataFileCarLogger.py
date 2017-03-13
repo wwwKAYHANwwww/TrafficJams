@@ -11,5 +11,5 @@ class DataFileCarLogger(ICarLogger):
         
         
     def log(self,time):
-        self.file.write("{}    {}    {}\n".format(time,self.car.x,self.car.v))
+        self.file.write("{}    {}    {}    {}\n".format(time,self.car.x,self.car.v,self.car.acceleration))
     

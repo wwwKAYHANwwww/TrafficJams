@@ -20,7 +20,7 @@ class Car(ITimeDependent):
         self.frontCar=frontCar
         
     def update(self, time,timeStep):
-        distance=(self.frontCar.x - self.x)
+        distance=abs(self.frontCar.x - self.x)
         self.acceleration = self.maxAcc if distance>self.criticalDistance else self.breakAcc
         
         if (self.v<self.maxVelocity) and (self.v>=0):
