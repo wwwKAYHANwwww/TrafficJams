@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+import numpy as np
 
 class Car(object):
     def __init__(self,t,x0,v0,targetVelocity,carID):

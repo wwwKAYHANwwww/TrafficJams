@@ -1,21 +1,19 @@
 import matplotlib.pyplot as plt
-
+import matplotlib.pyplot as plt
 from module import Car,plottingTX,animate
+import numpy as np
+from config import *
 
 
 cars={}
 tmpCarNumbers = 0
-maxCarNumber = 5
-t0 = 0
-timeStep = 0.1
-tFinal = 100
-nsteps = int(tFinal / timeStep)
-intervalAddingCar = 20.*timeStep
 
+nsteps = int(tFinal / timeStep)
 plt.figure(figsize=(15,10))
 
 for i in range(nsteps):
-    if ((i*timeStep/intervalAddingCar > tmpCarNumbers) & (tmpCarNumbers <= maxCarNumber)):
+    if ((i*timeStep/intervalAddingCar > tmpCarNumbers) & 
+        (tmpCarNumbers <= maxCarNumbers)):
         tmpCar = Car(t=t0 + i*20,x0=0,v0=10,targetVelocity=20,carID=tmpCarNumbers+1 )
         #cars[tmpCarNumbers] = {'x':tmpCar.x,'v':tmpCar.v}
         cars[tmpCarNumbers] = tmpCar
