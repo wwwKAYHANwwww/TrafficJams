@@ -16,6 +16,7 @@ fileLogger.initialize(tmpCar1)
 clock.addListener(tmpCar1)
 cars.append(tmpCar1)
 
+
 position += CONST_MinimumDistance + random.uniform(0,CONST_MaxNoise)
 for i in range(2,10):
     fileLogger=DataFileCarLogger()
