@@ -1,14 +1,14 @@
-from Car import Car
-from Clock import Clock
+from Model.Car import Car
+from Model.Clock import Clock
 import random
 from Logger.DataFileCarLogger import DataFileCarLogger
 
 CONST_MinimumDistance = 10
 CONST_MaxPositionNoise = 1
-CONST_MaxVelocityNoise = 5
+CONST_MaxVelocityNoise = 20
 CONST_LengthOfRoad=1000
 
-clock=Clock(.1, 20)
+clock=Clock(.1, 30)
 cars=[]
 position = 0.
 fileLogger=DataFileCarLogger()
@@ -18,7 +18,7 @@ clock.addListener(tmpCar1)
 cars.append(tmpCar1)
 
 
-position += CONST_MinimumDistance + random.uniform(0,CONST_MaxPositionNoise)
+position += CONST_MinimumDistance*2 + random.uniform(0,CONST_MaxPositionNoise)
 for i in range(2,10):
     fileLogger=DataFileCarLogger()
     tmpCar2=Car(0,position,"car{}".format(i),maxVelocity=20+random.uniform(-CONST_MaxVelocityNoise, CONST_MaxVelocityNoise), logger=fileLogger)
@@ -27,7 +27,7 @@ for i in range(2,10):
     cars.append(tmpCar2)
     clock.addListener(tmpCar2)
     tmpCar1=tmpCar2
-    position += CONST_MinimumDistance + random.uniform(0,CONST_MaxPositionNoise)
+    position += CONST_MinimumDistance*2 + random.uniform(0,CONST_MaxPositionNoise)
     
 cars[0].frontCar=cars[-1]
 
