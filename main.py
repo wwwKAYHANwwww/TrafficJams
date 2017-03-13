@@ -14,7 +14,7 @@ cars.append(tmpCar1)
 
 clock=Clock(.1, 20)
 
-position = 0.0
+position = 0.
 for i in range(2,10):
     fileLogger=DataFileCarLogger()
     tmpCar2=Car(0,position,"car{}".format(i),maxVelocity=20, logger=fileLogger)
