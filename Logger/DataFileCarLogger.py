@@ -3,6 +3,7 @@ from ICarLogger import ICarLogger
 class DataFileCarLogger(ICarLogger):
     def __init__(self,car=None):
         self.car=car
+        self.file=None
         
     def initialize(self,car):
         self.car=car
@@ -10,5 +11,5 @@ class DataFileCarLogger(ICarLogger):
         
         
     def log(self,time):
-        file.write("{}     {}\n".format(time,self.car.x))
+        self.file.write("{}     {}\n".format(time,self.car.x))
     
