@@ -2,7 +2,7 @@ from ITimeDependent import ITimeDependent
 
 class Car(ITimeDependent):
     
-    def __init__(self,v0,x0,maxVelocity=100,maxAcc=0.5,breakAcc=-0.1,criticalDistance=10,name,frontCar=None,logger=None):                                                                                   
+    def __init__(self,v0,x0,name,maxVelocity=100,maxAcc=0.5,breakAcc=-0.1,criticalDistance=10,frontCar=None,logger=None):                                                                                   
         self.x=x0                                           
         self.v=v0                                            
         self.maxVelocity= maxVelocity                 

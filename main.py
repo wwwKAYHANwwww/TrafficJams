@@ -1,6 +1,7 @@
 from Car import Car
 from Clock import Clock
 
+Const_MinimumDistance = 30
 cars=[]
 tmpCar1=Car(10,15,20,"car1")
 cars.append(tmpCar1)
@@ -8,7 +9,7 @@ cars.append(tmpCar1)
 clock=Clock(.1, 20)
 
 for i in range(2,10):
-    tmpCar2=Car(10,15,20,"car{}".format(i))
+    tmpCar2=Car(10,15,"car{}".format(i),maxVelocity=20)
     tmpCar2.setFrontCar(tmpCar1)
     cars.append(tmpCar2)
     clock.addListener(tmpCar2)
