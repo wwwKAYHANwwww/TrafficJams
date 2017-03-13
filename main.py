@@ -8,13 +8,16 @@ CONST_MaxNoise = 1
 CONST_LengthOfRoad=1000
 
 cars=[]
-tmpCar1=Car(10,15,20,"car1")
+position = 0.
+fileLogger=DataFileCarLogger()
+tmpCar1=Car(0,position,"car1", maxVelocity=20, logger=fileLogger)
+fileLogger.initialize(tmpCar1)
 cars.append(tmpCar1)
 
 
 clock=Clock(.1, 20)
 
-position = 0.
+position += CONST_MinimumDistance + random.uniform(0,CONST_MaxNoise)
 for i in range(2,10):
     fileLogger=DataFileCarLogger()
     tmpCar2=Car(0,position,"car{}".format(i),maxVelocity=20, logger=fileLogger)
