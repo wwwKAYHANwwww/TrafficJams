@@ -13,12 +13,12 @@ for i in range(3,195,10):
     carLogger=CriticalDensityCarLogger()
     carFactory=CarFactory(i,carLogger,clock)
     carFactory.startBuilding(Config.CONST_LengthOfRoad/i)
-    carFactory.setRandomBreak(0.1,0.5)
+    carFactory.setRandomBreak(0.05,0.1)
     clock.addListener(carLogger)
     clock.start()
     carLogger.finalize(double(i)/Config.CONST_LengthOfRoad)
     
-for i in range(195,5000,1):
+for i in range(198,5000,1):
 #i=500
     Config.CONST_MinimumDistance=Config.CONST_LengthOfRoad/i
     print(i,Config.CONST_MinimumDistance)
@@ -26,7 +26,7 @@ for i in range(195,5000,1):
     carLogger=CriticalDensityCarLogger()
     carFactory=CarFactory(i,carLogger,clock)
     carFactory.startBuilding(Config.CONST_LengthOfRoad/i)
-    carFactory.setRandomBreak(0.1,0.5)
+    carFactory.setRandomBreak(0.05,0.1)
     clock.addListener(carLogger)
     clock.start()
     carLogger.finalize(double(i)/Config.CONST_LengthOfRoad)
