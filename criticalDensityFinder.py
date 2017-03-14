@@ -5,7 +5,7 @@ from Factory.CarFactory import CarFactory
 from Logger.CriticalDensityCarLogger import CriticalDensityCarLogger
 from numpy import double
 
-for i in range(1000,5000,100):
+for i in range(3,5000,1):
 #i=500
     Config.CONST_MinimumDistance=Config.CONST_LengthOfRoad/i
     print(i,Config.CONST_MinimumDistance)
