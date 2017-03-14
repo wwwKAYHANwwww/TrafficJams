@@ -23,14 +23,14 @@ class CarFactory(object):
         self.clock.addListener(tmpCar1)
         self.cars.append(tmpCar1)
         
-        position =self.getRanfomPosition(position) 
+        position =self.getRandomPosition(position) 
         for i in range(2,self.numOfCars):
             tmpCar2=Car(0,position,"car{}".format(i),maxVelocity=self.getRandomMaxVelocity(25),)
             tmpCar1.setFrontCar(tmpCar2)
             self.cars.append(tmpCar2)
             self.clock.addListener(tmpCar2)
             tmpCar1=tmpCar2
-            position =self.getRanfomPosition(position) 
+            position =self.getRandomPosition(position) 
             
         
         self.cars[-1].frontCar=self.cars[0]
@@ -43,7 +43,7 @@ class CarFactory(object):
     def getRandomMaxVelocity(self,mean):
         return mean+random.uniform(-Config.CONST_MaxVelocityNoise, Config.CONST_MaxVelocityNoise)
         
-    def getRanfomPosition(self,previousPosition):
+    def getRandomPosition(self,previousPosition):
         return previousPosition+Config.CONST_MinimumDistance*2 + random.uniform(0,Config.CONST_MaxPositionNoise)
     
     def setRandomBreak(self,startTime,duration):
