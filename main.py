@@ -1,13 +1,12 @@
 from Model.Car import Car
 from Model.Clock import Clock
-from Model.CarFactory import CarFactory
-
-from Logger.DataFileCarLogger import DataFileCarLogger
+from Factory.CarFactory import CarFactory
+from Factory.DataFileCarLoggerFactory import DataFileCarLoggerFactory
 
 
 clock=Clock(.01, 100)
-fileLogger=DataFileCarLogger()
-carFactory=CarFactory(10,fileLogger,clock)
+fileLoggerFactory=DataFileCarLoggerFactory()
+carFactory=CarFactory(10,fileLoggerFactory,clock)
 carFactory.startBuilding()
 
 
