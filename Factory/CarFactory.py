@@ -30,7 +30,7 @@ class CarFactory(object):
             self.cars.append(tmpCar2)
             self.clock.addListener(tmpCar2)
             tmpCar1=tmpCar2
-            position =self.getRandomPosition(position) 
+            position = position+distance
             
         
         self.cars[-1].frontCar=self.cars[0]
