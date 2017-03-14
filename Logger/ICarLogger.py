@@ -14,4 +14,3 @@ class ICarLogger(ITimeDependent):
     
     def finalize(self):
         pass
-    

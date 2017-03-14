@@ -18,4 +18,3 @@ class DataFileCarLogger(ICarLogger):
     def finalize(self):
         for i in range(len(self.cars)):
             self.file[i].close()
-    

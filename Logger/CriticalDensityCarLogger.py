@@ -23,8 +23,6 @@ class CriticalDensityCarLogger(ICarLogger):
         self.avgMean+=mean/20000
         #self.file.write("{}    {}\n".format(time,mean))
         
-        
     def finalize(self,dens):
         self.file.write("{}    {}\n".format(dens, 1-self.avgMean/25))
         self.file.close()
-        

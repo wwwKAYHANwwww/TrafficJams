@@ -55,5 +55,4 @@ class Car(ITimeDependent):
     def pushBreak(self,breakDuration,startTime=0):
         self.breakDuration=breakDuration
         self.breakStartTime=startTime
-        
     

@@ -16,4 +16,3 @@ class Clock(object):
         for t in np.arange(0,self.finalTime,self.timeStep):
             for i in self.listeners:
                 i.update(t,self.timeStep)
-        

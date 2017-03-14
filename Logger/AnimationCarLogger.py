@@ -17,4 +17,3 @@ class AnimationCarLogger(ICarLogger):
         self.file.write("\n\n")
     def finalize(self):
         self.file.close()
-    

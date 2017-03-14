@@ -15,4 +15,3 @@ carFactory.setRandomBreak(100,1)
 clock.addListener(carLogger)
 clock.start()
 carLogger.finalize()
-    
