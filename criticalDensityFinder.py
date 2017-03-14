@@ -4,8 +4,8 @@ from Model.Config import Config
 from Factory.CarFactory import CarFactory
 from Logger.CriticalDensityCarLogger import CriticalDensityCarLogger
 
-for i in range(0,5):
-    CONST_MinimumDistance=i*10
+for i in range(0,20):
+    CONST_MinimumDistance=i*3
     print(CONST_MinimumDistance)
     clock=Clock(.005, 500)
     carLogger=CriticalDensityCarLogger()
