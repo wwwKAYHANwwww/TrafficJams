@@ -8,6 +8,4 @@ clock=Clock(.005, 500)
 fileLoggerFactory=DataFileCarLoggerFactory()
 carFactory=CarFactory(10,fileLoggerFactory,clock)
 carFactory.startBuilding()
-
-
 clock.start()

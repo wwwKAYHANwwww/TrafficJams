@@ -3,7 +3,7 @@ from Config import Config
 
 class Car(ITimeDependent):
     
-    def __init__(self,v0,x0,name,maxVelocity=100,maxAcc=1,breakAcc=-25.0,criticalDistance=10,frontCar=None,logger=None):                                                                                   
+    def __init__(self,v0,x0,name,maxVelocity=100,maxAcc=1,breakAcc=-15.0,criticalDistance=10,frontCar=None,logger=None):                                                                                   
         self.x=x0                                           
         self.v=v0                                            
         self.maxVelocity= maxVelocity             
@@ -15,19 +15,26 @@ class Car(ITimeDependent):
         self.breakAcc=breakAcc
         self.criticalDistance=criticalDistance
         self.logger=logger
-        
+        self.breakDuration=0
+        self.breakStartTime=0
         
     def setFrontCar(self,frontCar):
         self.frontCar=frontCar
         
     def update(self, time,timeStep):
         distance=self.distanceToFrontCar()
-         
-        if (distance>self.criticalDistance):
-            self.acceleration=self.maxAcc 
+        
+        if (self.breakDuration>0 and self.breakStartTime<time):
+            self.acceleration=self.breakAcc
+            self.breakDuration-=timeStep
+            
         elif (distance<5):
             self.acceleration=0
             self.v=0
+              
+        elif (distance>self.criticalDistance):
+            self.acceleration=self.maxAcc 
+            
         else:
             self.acceleration=self.breakAcc
             
@@ -47,4 +54,8 @@ class Car(ITimeDependent):
             d =  abs(Config.CONST_LengthOfRoad -self.frontCar.x)+abs(Config.CONST_LengthOfRoad-self.frontCar.x)
             return d
     
+    def pushBreak(self,breakDuration,startTime=0):
+        self.breakDuration=breakDuration
+        self.breakStartTime=startTime
+        
     
