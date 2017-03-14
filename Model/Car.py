@@ -6,7 +6,7 @@ class Car(ITimeDependent):
     def __init__(self,v0,x0,name,maxVelocity=100,maxAcc=1,breakAcc=-25.0,criticalDistance=10,frontCar=None,logger=None):                                                                                   
         self.x=x0                                           
         self.v=v0                                            
-        self.maxVelocity= maxVelocity                 
+        self.maxVelocity= maxVelocity             
         self.frontCar=frontCar;                             
         self.acceleration=0   
         self.breakAcc=breakAcc                         
@@ -22,17 +22,18 @@ class Car(ITimeDependent):
         
     def update(self, time,timeStep):
         distance=self.distanceToFrontCar()
-        self.acceleration = self.maxAcc if distance>self.criticalDistance else self.breakAcc
+         
+        if (distance>self.criticalDistance):
+            self.acceleration=self.maxAcc 
+        elif (distance<5):
+            self.acceleration=0
+            self.v=0
+        else:
+            self.acceleration=self.breakAcc
+            
         
-        
-        if (self.v<self.maxVelocity) and (self.v>=0):
+        if ((self.v<self.maxVelocity) and (self.v>=0))or((self.v>self.maxVelocity) and (self.acceleration<0))or((self.v<=0) and (self.acceleration>0)):
             self.v+=self.acceleration * timeStep
-            
-        if (self.v>self.maxVelocity) and (self.acceleration<0):
-            self.v+=self.acceleration * timeStep   
-            
-        if (self.v<=0) and (self.acceleration>0):
-            self.v+=self.acceleration * timeStep   
             
         self.x+= self.v * timeStep
         self.x=self.x%Config.CONST_LengthOfRoad
