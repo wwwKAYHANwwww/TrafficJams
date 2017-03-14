@@ -15,15 +15,15 @@ class CriticalDensityCarLogger(ICarLogger):
         self.file2=open("report/variance2.dat","a")
         
     def update(self,time,timeStep):
-        mean=0
-        squareMean=0
+        mean=0.0
+        squareMean=0.0
         for i in range(len(self.cars)-1):
             mean+=self.cars[i].distanceToFrontCar()
             squareMean+=self.cars[i].distanceToFrontCar()**2
         mean=mean/(len(self.cars)-1)
         squareMean=squareMean/(len(self.cars)-1)
-        self.avgMean+=mean
-        self.avgSquareMean+=squareMean
+        self.avgMean+=mean/5000
+        self.avgSquareMean+=(mean**2)
         self.file.write("{}    {}\n".format(time,squareMean-mean**2))
     
     def finalize(self):
