@@ -2,7 +2,7 @@ from ITimeDependent import ITimeDependent
 
 class Car(ITimeDependent):
     
-    def __init__(self,v0,x0,name,maxVelocity=100,maxAcc=0.5,breakAcc=-0.1,criticalDistance=10,frontCar=None,logger=None):                                                                                   
+    def __init__(self,v0,x0,name,maxVelocity=100,maxAcc=1,breakAcc=-15.0,criticalDistance=10,frontCar=None,logger=None):                                                                                   
         self.x=x0                                           
         self.v=v0                                            
         self.maxVelocity= maxVelocity                 
@@ -23,8 +23,15 @@ class Car(ITimeDependent):
         distance=abs(self.frontCar.x - self.x)
         self.acceleration = self.maxAcc if distance>self.criticalDistance else self.breakAcc
         
+        
         if (self.v<self.maxVelocity) and (self.v>=0):
             self.v+=self.acceleration * timeStep
+            
+        if (self.v>self.maxVelocity) and (self.acceleration<0):
+            self.v+=self.acceleration * timeStep   
+            
+        if (self.v<=0) and (self.acceleration>0):
+            self.v+=self.acceleration * timeStep   
             
         self.x+= self.v * timeStep
         self.logger.log(time)

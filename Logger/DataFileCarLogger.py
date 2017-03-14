@@ -7,7 +7,7 @@ class DataFileCarLogger(ICarLogger):
         
     def initialize(self,car):
         self.car=car
-        self.file=open("report/{}.dat".format(car.name),"a")
+        self.file=open("report/{}.dat".format(car.name),"w")
         
         
     def log(self,time):
