@@ -49,7 +49,7 @@ class Car(ITimeDependent):
         if d>=0:
             return d
         else:
-            d =  abs(Config.CONST_LengthOfRoad -self.frontCar.x)+abs(Config.CONST_LengthOfRoad-self.frontCar.x)
+            d =  abs(Config.CONST_LengthOfRoad -self.frontCar.x)+abs(self.frontCar.x)
             return d
     
     def pushBreak(self,breakDuration,startTime=0):

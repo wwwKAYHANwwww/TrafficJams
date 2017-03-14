@@ -6,8 +6,9 @@ from Logger.DataFileCarLogger import DataFileCarLogger
 
 clock=Clock(.005, 500)
 carLogger=DataFileCarLogger()
-carFactory=CarFactory(10,carLogger,clock)
+carFactory=CarFactory(50,carLogger,clock)
 carFactory.startBuilding()
 clock.addListener(carLogger)
 clock.start()
+carFactory.setRandomBreak(100,1)
 carLogger.finalize();

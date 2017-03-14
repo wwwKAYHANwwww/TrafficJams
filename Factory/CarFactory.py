@@ -48,5 +48,6 @@ class CarFactory(object):
     
     def setRandomBreak(self,startTime,duration):
         ind=int(random.uniform(0,self.numOfCars-1))
+        #ind=5
         self.cars[ind].pushBreak(duration,startTime=startTime)
         

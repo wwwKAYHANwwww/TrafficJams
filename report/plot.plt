@@ -1,7 +1,7 @@
 set term png size 1200,800
 set output "positions.png"
 
-numOfCars=9
+numOfCars=50
 
 set ylabel "X Position" 
 set xlabel "Time" 
