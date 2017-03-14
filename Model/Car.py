@@ -1,4 +1,5 @@
 from ITimeDependent import ITimeDependent
+from Config import Config
 
 class Car(ITimeDependent):
     
@@ -20,7 +21,7 @@ class Car(ITimeDependent):
         self.frontCar=frontCar
         
     def update(self, time,timeStep):
-        distance=abs(self.frontCar.x - self.x)
+        distance=self.distanceToFrontCar()
         self.acceleration = self.maxAcc if distance>self.criticalDistance else self.breakAcc
         
         
@@ -34,7 +35,15 @@ class Car(ITimeDependent):
             self.v+=self.acceleration * timeStep   
             
         self.x+= self.v * timeStep
+        self.x=self.x%Config.CONST_LengthOfRoad
         self.logger.log(time)
-        
+       
+    def distanceToFrontCar(self):
+        d =  self.frontCar.x - self.x
+        if d>=0:
+            return d
+        else:
+            d =  abs(Config.CONST_LengthOfRoad -self.frontCar.x)+abs(Config.CONST_LengthOfRoad-self.frontCar.x)
+            return d
     
     
