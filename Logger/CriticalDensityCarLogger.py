@@ -24,7 +24,7 @@ class CriticalDensityCarLogger(ICarLogger):
         #self.file.write("{}    {}\n".format(time,mean))
         
         
-    def finalize(self):
-        self.file.write("{}\n".format(1-self.avgMean/25))
+    def finalize(self,dens):
+        self.file.write("{}    {}\n".format(dens, 1-self.avgMean/25))
         self.file.close()
         

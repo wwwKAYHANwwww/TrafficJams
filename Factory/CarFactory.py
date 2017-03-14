@@ -15,17 +15,17 @@ class CarFactory(object):
         self.clock=clock
         self.cars=[]
         
-    def startBuilding(self):
+    def startBuilding(self, distance):
         
         position=0.0
-        tmpCar1=Car(0,position,"car1", maxVelocity=self.getRandomMaxVelocity(25),)
+        tmpCar1=Car(25,position,"car1", maxVelocity=self.getRandomMaxVelocity(25),)
 
         self.clock.addListener(tmpCar1)
         self.cars.append(tmpCar1)
         
-        position =self.getRandomPosition(position) 
+        position = position+distance
         for i in range(2,self.numOfCars):
-            tmpCar2=Car(0,position,"car{}".format(i),maxVelocity=self.getRandomMaxVelocity(25),)
+            tmpCar2=Car(25,position,"car{}".format(i),maxVelocity=self.getRandomMaxVelocity(25),)
             tmpCar1.setFrontCar(tmpCar2)
             self.cars.append(tmpCar2)
             self.clock.addListener(tmpCar2)
