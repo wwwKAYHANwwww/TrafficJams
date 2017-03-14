@@ -1,15 +1,21 @@
 from ICarLogger import ICarLogger
 
 class DataFileCarLogger(ICarLogger):
-    def __init__(self,car=None):
-        self.car=car
-        self.file=None
+    def __init__(self,cars=None):
+        self.cars=cars
+        self.file=[]
         
-    def initialize(self,car):
-        self.car=car
-        self.file=open("report/{}.dat".format(car.name),"w")
+    def initialize(self,cars):
+        self.cars=cars
+        for i in range(len(self.cars)):
+            self.file.append(open("report/{}.dat".format(cars[i].name),"w"))
         
-        
-    def log(self,time):
-        self.file.write("{}    {}    {}    {}\n".format(time,self.car.x,self.car.v,self.car.acceleration))
+    def update(self,time,timeStep):
+       
+        for i in range(len(self.cars)):
+            self.file[i].write("{}    {}    {}    {}\n".format(time,self.cars[i].x,self.cars[i].v,self.cars[i].acceleration))
+    
+    def finalize(self):
+        for i in range(len(self.cars)):
+            self.file[i].close()
     
