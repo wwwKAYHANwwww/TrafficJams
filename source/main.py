@@ -1,25 +1,14 @@
-import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
-from module import Car,plottingTX,animate
-import numpy as np
-from config import *
+from Model.Car import Car
+from Model.Clock import Clock
+from Factory.CarFactory import CarFactory
+from Logger.DataFileCarLogger import DataFileCarLogger
 
 
-cars={}
-tmpCarNumbers = 0
-
-nsteps = int(tFinal / timeStep)
-plt.figure(figsize=(15,10))
-
-for i in range(nsteps):
-    if ((i*timeStep/intervalAddingCar > tmpCarNumbers) & 
-        (tmpCarNumbers <= maxCarNumbers)):
-        tmpCar = Car(t=t0 + i*20,x0=0,v0=10,targetVelocity=20,carID=tmpCarNumbers+1 )
-        #cars[tmpCarNumbers] = {'x':tmpCar.x,'v':tmpCar.v}
-        cars[tmpCarNumbers] = tmpCar
-        tmpCarNumbers = len(cars)
-        
-    for j in range(tmpCarNumbers):
-        cars[j].move(timeStep,j,cars)
-    #animate(i*timeStep,cars)
-    plottingTX(i*timeStep,cars)
+clock=Clock(.005, 500)
+carLogger=DataFileCarLogger()
+carFactory=CarFactory(50,carLogger,clock)
+carFactory.startBuilding()
+clock.addListener(carLogger)
+clock.start()
+carFactory.setRandomBreak(100,1)
+carLogger.finalize();

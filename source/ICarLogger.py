@@ -1,8 +1,16 @@
+import sys
+sys.path.append("..") 
 
-class ICarLogger(object):
+from Model.ITimeDependent import ITimeDependent
+class ICarLogger(ITimeDependent):
     def __init__(self,car):
         self.car= car
     
-    def log(self,time):
+    def initialize(self):
         pass
     
+    def update(self,time,timeStep):
+        pass
+    
+    def finalize(self):
+        pass
