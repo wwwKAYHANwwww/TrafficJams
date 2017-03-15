@@ -35,6 +35,8 @@ Information for Developers
    
    ForDevelopers.rst
 
+INTRODUCTION
+
 TrafficJams is a program that is platform independent. TrafficJams program was designed to simulate traffic control of cars. The program automatically detects traffic situation and control the cars by authomatically regulating the speed control unit of the vhehicles. Individauls can download and install the program on there laptops and/or mobile devices to enable them play it. The program is freely available. For a quick guide on how to download and play TrafficJams click here. Also, how to use TrafficJams link provides you with the detailed steps on how to use/run the program.
 
 .. _my-figure:

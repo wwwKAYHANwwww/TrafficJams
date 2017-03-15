@@ -1,6 +1,5 @@
-
-
-<!doctype html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -9,7 +8,7 @@
     
     <title>Source codes &#8212; TrafficJams 1.0.1 documentation</title>
     
-    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,14 +25,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Functions and Classes" href="FunctionsAndClasses.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <!--[if lt IE 9]>
-    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
-    <![endif]-->
+    <link rel="prev" title="Functions and Classes" href="FunctionsAndClasses.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -47,31 +41,7 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">TrafficJams 1.0.1 documentation</a> &#187;</li> 
       </ul>
-    </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="FunctionsAndClasses.html"
-                        title="previous chapter">Functions and Classes</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/ForDevelopers.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -81,12 +51,224 @@
   <div class="section" id="source-codes">
 <h1>Source codes<a class="headerlink" href="#source-codes" title="Permalink to this headline">¶</a></h1>
 <p>If you are a developer, you can contribute to the improvement of TrafficJams program. Please see below for more information about the source codes.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span> 
+
+<span class="kn">from</span> <span class="nn">Model.Car</span> <span class="k">import</span> <span class="n">Car</span> 
+<span class="kn">from</span> <span class="nn">Model.Config</span> <span class="k">import</span> <span class="n">Config</span>
+<span class="kn">from</span> <span class="nn">Logger.DataFileCarLogger</span> <span class="k">import</span> <span class="n">DataFileCarLogger</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="k">class</span> <span class="nc">CarFactory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">numOfCars</span><span class="p">,</span><span class="n">carLogger</span><span class="p">,</span><span class="n">clock</span><span class="p">,</span><span class="n">view</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numOfCars</span><span class="o">=</span><span class="n">numOfCars</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">carLogger</span><span class="o">=</span><span class="n">carLogger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">=</span><span class="n">view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">=</span><span class="n">clock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">=</span><span class="p">[]</span>
+        
+    <span class="k">def</span> <span class="nf">startBuilding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
+        
+        <span class="n">position</span><span class="o">=</span><span class="mf">0.0</span>
+        <span class="n">tmpCar1</span><span class="o">=</span><span class="n">Car</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="s2">&quot;car1&quot;</span><span class="p">,</span> <span class="n">maxVelocity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getRandomMaxVelocity</span><span class="p">(</span><span class="mi">25</span><span class="p">),)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">tmpCar1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpCar1</span><span class="p">)</span>
+        
+        <span class="n">position</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="n">distance</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">numOfCars</span><span class="p">):</span>
+            <span class="n">tmpCar2</span><span class="o">=</span><span class="n">Car</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="s2">&quot;car</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="n">maxVelocity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getRandomMaxVelocity</span><span class="p">(</span><span class="mi">25</span><span class="p">),)</span>
+            <span class="n">tmpCar1</span><span class="o">.</span><span class="n">setFrontCar</span><span class="p">(</span><span class="n">tmpCar2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpCar2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">tmpCar2</span><span class="p">)</span>
+            <span class="n">tmpCar1</span><span class="o">=</span><span class="n">tmpCar2</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="n">distance</span>
+            
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">frontCar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1">#for i in self.cars:</span>
+        <span class="c1">#    print(i.name,i.frontCar.name,i.x )</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">carLogger</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">)</span>
+        
+
+    <span class="k">def</span> <span class="nf">getRandomMaxVelocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mean</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">mean</span><span class="o">+</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_MaxVelocityNoise</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">CONST_MaxVelocityNoise</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">getRandomPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">previousPosition</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">previousPosition</span><span class="o">+</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_MinimumDistance</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_MaxPositionNoise</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">setRandomBreak</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">startTime</span><span class="p">,</span><span class="n">duration</span><span class="p">):</span>
+        <span class="n">ind</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">numOfCars</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1">#ind=5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">pushBreak</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span><span class="n">startTime</span><span class="o">=</span><span class="n">startTime</span><span class="p">)</span>
+        
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span> 
+
+<span class="kn">from</span> <span class="nn">Model.Car</span> <span class="k">import</span> <span class="n">Car</span> 
+<span class="kn">from</span> <span class="nn">Model.Config</span> <span class="k">import</span> <span class="n">Config</span>
+<span class="kn">from</span> <span class="nn">Logger.DataFileCarLogger</span> <span class="k">import</span> <span class="n">DataFileCarLogger</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="k">class</span> <span class="nc">CarFactory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">numOfCars</span><span class="p">,</span><span class="n">carLogger</span><span class="p">,</span><span class="n">clock</span><span class="p">,</span><span class="n">view</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numOfCars</span><span class="o">=</span><span class="n">numOfCars</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">carLogger</span><span class="o">=</span><span class="n">carLogger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">=</span><span class="n">view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">=</span><span class="n">clock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">=</span><span class="p">[]</span>
+        
+    <span class="k">def</span> <span class="nf">startBuilding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">):</span>
+        
+        <span class="n">position</span><span class="o">=</span><span class="mf">0.0</span>
+        <span class="n">tmpCar1</span><span class="o">=</span><span class="n">Car</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="s2">&quot;car1&quot;</span><span class="p">,</span> <span class="n">maxVelocity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getRandomMaxVelocity</span><span class="p">(</span><span class="mi">25</span><span class="p">),)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">tmpCar1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpCar1</span><span class="p">)</span>
+        
+        <span class="n">position</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="n">distance</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">numOfCars</span><span class="p">):</span>
+            <span class="n">tmpCar2</span><span class="o">=</span><span class="n">Car</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="s2">&quot;car</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="n">maxVelocity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getRandomMaxVelocity</span><span class="p">(</span><span class="mi">25</span><span class="p">),)</span>
+            <span class="n">tmpCar1</span><span class="o">.</span><span class="n">setFrontCar</span><span class="p">(</span><span class="n">tmpCar2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpCar2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">tmpCar2</span><span class="p">)</span>
+            <span class="n">tmpCar1</span><span class="o">=</span><span class="n">tmpCar2</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">position</span><span class="o">+</span><span class="n">distance</span>
+            
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">frontCar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1">#for i in self.cars:</span>
+        <span class="c1">#    print(i.name,i.frontCar.name,i.x )</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">carLogger</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">)</span>
+        
+
+    <span class="k">def</span> <span class="nf">getRandomMaxVelocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mean</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">mean</span><span class="o">+</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_MaxVelocityNoise</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">CONST_MaxVelocityNoise</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">getRandomPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">previousPosition</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">previousPosition</span><span class="o">+</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_MinimumDistance</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_MaxPositionNoise</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">setRandomBreak</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">startTime</span><span class="p">,</span><span class="n">duration</span><span class="p">):</span>
+        <span class="n">ind</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">numOfCars</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="c1">#ind=5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">pushBreak</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span><span class="n">startTime</span><span class="o">=</span><span class="n">startTime</span><span class="p">)</span>
+        
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ICarLogger</span> <span class="k">import</span> <span class="n">ICarLogger</span>
+
+<span class="k">class</span> <span class="nc">DataFileCarLogger</span><span class="p">(</span><span class="n">ICarLogger</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">=</span><span class="n">cars</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">=</span><span class="p">[]</span>
+        
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cars</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">=</span><span class="n">cars</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;report/</span><span class="si">{}</span><span class="s2">.dat&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">),</span><span class="s2">&quot;w&quot;</span><span class="p">))</span>
+        
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">timeStep</span><span class="p">):</span>
+       
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">v</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">acceleration</span><span class="p">))</span>
+    
+    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span> 
+
+<span class="kn">from</span> <span class="nn">Model.ITimeDependent</span> <span class="k">import</span> <span class="n">ITimeDependent</span>
+<span class="k">class</span> <span class="nc">ICarLogger</span><span class="p">(</span><span class="n">ITimeDependent</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">car</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">=</span> <span class="n">car</span>
+    
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+    
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">timeStep</span><span class="p">):</span>
+        <span class="k">pass</span>
+    
+    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ICarLogger</span> <span class="k">import</span> <span class="n">ICarLogger</span>
+
+<span class="k">class</span> <span class="nc">AnimationCarLogger</span><span class="p">(</span><span class="n">ICarLogger</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">=</span><span class="n">cars</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">=</span><span class="p">[]</span>
+        
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cars</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">=</span><span class="n">cars</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;report/animation.dat&quot;</span><span class="p">,</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">timeStep</span><span class="p">):</span>
+       
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">v</span><span class="p">,</span><span class="n">time</span><span class="p">))</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ICarLogger</span> <span class="k">import</span> <span class="n">ICarLogger</span>
+<span class="kn">from</span> <span class="nn">Model.Config</span> <span class="k">import</span> <span class="n">Config</span>
+
+<span class="k">class</span> <span class="nc">CriticalDensityCarLogger</span><span class="p">(</span><span class="n">ICarLogger</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">=</span><span class="n">cars</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">avgMean</span><span class="o">=</span><span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">avgSquareMean</span><span class="o">=</span><span class="mi">0</span>
+        <span class="c1">#self.file=open(&quot;report/variance.dat&quot;,&quot;w&quot;)</span>
+        <span class="c1">#self.file2=open(&quot;report/variance2.dat&quot;,&quot;w&quot;)</span>
+        
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cars</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">=</span><span class="n">cars</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;report/variance.dat&quot;</span><span class="p">,</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+        <span class="c1">#self.file2=open(&quot;report/variance2.dat&quot;,&quot;a&quot;)</span>
+        
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">timeStep</span><span class="p">):</span>
+        <span class="n">mean</span><span class="o">=</span><span class="mf">0.0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">mean</span><span class="o">+=</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">v</span>
+        <span class="n">mean</span><span class="o">=</span><span class="n">mean</span><span class="o">/</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">avgMean</span><span class="o">+=</span><span class="n">mean</span><span class="o">/</span><span class="mi">20000</span>
+        <span class="c1">#self.file.write(&quot;{}    {}\n&quot;.format(time,mean))</span>
+        
+    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dens</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dens</span><span class="p">,</span> <span class="mi">1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">avgMean</span><span class="o">/</span><span class="mi">25</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ICarLogger</span> <span class="k">import</span> <span class="n">ICarLogger</span>
+
+<span class="k">class</span> <span class="nc">VisualCarLogger</span><span class="p">(</span><span class="n">ICarLogger</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ITimeDependent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">timeStep</span><span class="p">):</span>
+        <span class="k">pass</span>
+</pre></div>
+</div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ITimeDependent</span> <span class="k">import</span> <span class="n">ITimeDependent</span>
 <span class="kn">from</span> <span class="nn">Config</span> <span class="k">import</span> <span class="n">Config</span>
 
 <span class="k">class</span> <span class="nc">Car</span><span class="p">(</span><span class="n">ITimeDependent</span><span class="p">):</span>
     
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v0</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">maxVelocity</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">maxAcc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">breakAcc</span><span class="o">=-</span><span class="mf">15.0</span><span class="p">,</span><span class="n">criticalDistance</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">frontCar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>                                                                                   
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v0</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">maxVelocity</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">maxAcc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">breakAcc</span><span class="o">=-</span><span class="mf">15.0</span><span class="p">,</span><span class="n">criticalDistance</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">frontCar</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>                                                                                   
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">=</span><span class="n">x0</span>                                           
         <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="o">=</span><span class="n">v0</span>                                            
         <span class="bp">self</span><span class="o">.</span><span class="n">maxVelocity</span><span class="o">=</span> <span class="n">maxVelocity</span>             
@@ -97,7 +279,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">maxAcc</span><span class="o">=</span><span class="n">maxAcc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">breakAcc</span><span class="o">=</span><span class="n">breakAcc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">criticalDistance</span><span class="o">=</span><span class="n">criticalDistance</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">=</span><span class="n">logger</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">breakDuration</span><span class="o">=</span><span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">breakStartTime</span><span class="o">=</span><span class="mi">0</span>
         
@@ -127,20 +308,18 @@
             
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">*</span> <span class="n">timeStep</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">%</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_LengthOfRoad</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
        
     <span class="k">def</span> <span class="nf">distanceToFrontCar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">d</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">frontCar</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
         <span class="k">if</span> <span class="n">d</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">d</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">d</span> <span class="o">=</span>  <span class="nb">abs</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_LengthOfRoad</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">frontCar</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_LengthOfRoad</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">frontCar</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">d</span> <span class="o">=</span>  <span class="nb">abs</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_LengthOfRoad</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">frontCar</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frontCar</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">d</span>
     
     <span class="k">def</span> <span class="nf">pushBreak</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">breakDuration</span><span class="p">,</span><span class="n">startTime</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">breakDuration</span><span class="o">=</span><span class="n">breakDuration</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">breakStartTime</span><span class="o">=</span><span class="n">startTime</span>
-        
     
 </pre></div>
 </div>
@@ -162,127 +341,124 @@
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">finalTime</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">timeStep</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">listeners</span><span class="p">:</span>
                 <span class="n">i</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">timeStep</span><span class="p">)</span>
-        
 </pre></div>
 </div>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
     
-    <span class="n">CONST_MinimumDistance</span> <span class="o">=</span> <span class="mi">150</span>
-    <span class="n">CONST_MaxPositionNoise</span> <span class="o">=</span> <span class="mi">0</span><span class="c1">#20</span>
-    <span class="n">CONST_MaxVelocityNoise</span> <span class="o">=</span> <span class="mi">0</span><span class="c1">#5</span>
-    <span class="n">CONST_LengthOfRoad</span><span class="o">=</span><span class="mi">8000</span>
+    <span class="n">CONST_MinimumDistance</span> <span class="o">=</span> <span class="mf">50.</span>
+    <span class="n">CONST_MaxPositionNoise</span> <span class="o">=</span> <span class="mf">0.</span><span class="c1">#20</span>
+    <span class="n">CONST_MaxVelocityNoise</span> <span class="o">=</span> <span class="mf">0.</span><span class="c1">#5</span>
+    <span class="n">CONST_LengthOfRoad</span><span class="o">=</span><span class="mf">1000.</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ITimeDependent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">timeStep</span><span class="p">):</span>
-        <span class="k">pass</span>
-</pre></div>
-</div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ICarLogger</span> <span class="k">import</span> <span class="n">ICarLogger</span>
-
-<span class="k">class</span> <span class="nc">DataFileCarLogger</span><span class="p">(</span><span class="n">ICarLogger</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">car</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">=</span><span class="n">car</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">=</span><span class="kc">None</span>
-        
-    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">car</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">=</span><span class="n">car</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;report/</span><span class="si">{}</span><span class="s2">.dat&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">car</span><span class="o">.</span><span class="n">name</span><span class="p">),</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        
-        
-    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">.</span><span class="n">v</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">.</span><span class="n">acceleration</span><span class="p">))</span>
-    
-</pre></div>
-</div>
-<div class="highlight-default"><div class="highlight"><pre><span></span>
-<span class="k">class</span> <span class="nc">ICarLogger</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">car</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">=</span> <span class="n">car</span>
-    
-    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">):</span>
-        <span class="k">pass</span>
-    
-</pre></div>
-</div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ICarLogger</span> <span class="k">import</span> <span class="n">ICarLogger</span>
-
-<span class="k">class</span> <span class="nc">VisualCarLogger</span><span class="p">(</span><span class="n">ICarLogger</span><span class="p">):</span>
-    <span class="k">pass</span>
-</pre></div>
-</div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span> 
-
-<span class="kn">from</span> <span class="nn">Model.Car</span> <span class="k">import</span> <span class="n">Car</span> 
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Model.Car</span> <span class="k">import</span> <span class="n">Car</span>
+<span class="kn">from</span> <span class="nn">Model.Clock</span> <span class="k">import</span> <span class="n">Clock</span>
 <span class="kn">from</span> <span class="nn">Model.Config</span> <span class="k">import</span> <span class="n">Config</span>
-<span class="kn">from</span> <span class="nn">Logger.DataFileCarLogger</span> <span class="k">import</span> <span class="n">DataFileCarLogger</span>
-<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">Factory.CarFactory</span> <span class="k">import</span> <span class="n">CarFactory</span>
+<span class="kn">from</span> <span class="nn">Logger.CriticalDensityCarLogger</span> <span class="k">import</span> <span class="n">CriticalDensityCarLogger</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">double</span>
 
-<span class="k">class</span> <span class="nc">CarFactory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">195</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
+<span class="c1">#i=500</span>
+    <span class="n">Config</span><span class="o">.</span><span class="n">CONST_MinimumDistance</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_LengthOfRoad</span><span class="o">/</span><span class="n">i</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_MinimumDistance</span><span class="p">)</span>
+    <span class="n">clock</span><span class="o">=</span><span class="n">Clock</span><span class="p">(</span><span class="o">.</span><span class="mi">05</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">carLogger</span><span class="o">=</span><span class="n">CriticalDensityCarLogger</span><span class="p">()</span>
+    <span class="n">carFactory</span><span class="o">=</span><span class="n">CarFactory</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">carLogger</span><span class="p">,</span><span class="n">clock</span><span class="p">)</span>
+    <span class="n">carFactory</span><span class="o">.</span><span class="n">startBuilding</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_LengthOfRoad</span><span class="o">/</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">carFactory</span><span class="o">.</span><span class="n">setRandomBreak</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">clock</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">carLogger</span><span class="p">)</span>
+    <span class="n">clock</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="n">carLogger</span><span class="o">.</span><span class="n">finalize</span><span class="p">(</span><span class="n">double</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">/</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_LengthOfRoad</span><span class="p">)</span>
     
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">numOfCars</span><span class="p">,</span><span class="n">loggerFactory</span><span class="p">,</span><span class="n">clock</span><span class="p">,</span><span class="n">view</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">numOfCars</span><span class="o">=</span><span class="n">numOfCars</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">loggerFactory</span><span class="o">=</span><span class="n">loggerFactory</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">=</span><span class="n">view</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">=</span><span class="n">clock</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">=</span><span class="p">[]</span>
-        
-    <span class="k">def</span> <span class="nf">startBuilding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">fileLogger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loggerFactory</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
-        <span class="n">position</span><span class="o">=</span><span class="mf">0.0</span>
-        <span class="n">tmpCar1</span><span class="o">=</span><span class="n">Car</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="s2">&quot;car1&quot;</span><span class="p">,</span> <span class="n">maxVelocity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getRandomMaxVelocity</span><span class="p">(</span><span class="mi">25</span><span class="p">),</span> <span class="n">logger</span><span class="o">=</span><span class="n">fileLogger</span><span class="p">)</span>
-        <span class="n">fileLogger</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">tmpCar1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">tmpCar1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpCar1</span><span class="p">)</span>
-        
-        <span class="n">position</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getRanfomPosition</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> 
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">):</span>
-            <span class="n">fileLogger</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loggerFactory</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
-            <span class="n">tmpCar2</span><span class="o">=</span><span class="n">Car</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">position</span><span class="p">,</span><span class="s2">&quot;car</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="n">maxVelocity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getRandomMaxVelocity</span><span class="p">(</span><span class="mi">25</span><span class="p">),</span> <span class="n">logger</span><span class="o">=</span><span class="n">fileLogger</span><span class="p">)</span>
-            <span class="n">fileLogger</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">tmpCar2</span><span class="p">)</span>
-            <span class="n">tmpCar1</span><span class="o">.</span><span class="n">setFrontCar</span><span class="p">(</span><span class="n">tmpCar2</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmpCar2</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">tmpCar2</span><span class="p">)</span>
-            <span class="n">tmpCar1</span><span class="o">=</span><span class="n">tmpCar2</span>
-            <span class="n">position</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getRanfomPosition</span><span class="p">(</span><span class="n">position</span><span class="p">)</span> 
-            
-        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">frontCar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">frontCar</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">i</span><span class="o">.</span><span class="n">x</span> <span class="p">)</span>
-
-
-    <span class="k">def</span> <span class="nf">getRandomMaxVelocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mean</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">mean</span><span class="o">+</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_MaxVelocityNoise</span><span class="p">,</span> <span class="n">Config</span><span class="o">.</span><span class="n">CONST_MaxVelocityNoise</span><span class="p">)</span>
-        
-    <span class="k">def</span> <span class="nf">getRanfomPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">previousPosition</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">previousPosition</span><span class="o">+</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_MinimumDistance</span><span class="o">*</span><span class="mi">2</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_MaxPositionNoise</span><span class="p">)</span>
-    
-    <span class="k">def</span> <span class="nf">setRandomBreak</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">startTime</span><span class="p">,</span><span class="n">duration</span><span class="p">):</span>
-        <span class="n">ind</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">numOfCars</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span><span class="o">.</span><span class="n">pushBreak</span><span class="p">(</span><span class="n">duration</span><span class="p">,</span><span class="n">startTime</span><span class="o">=</span><span class="n">startTime</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">198</span><span class="p">,</span><span class="mi">5000</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span>
+<span class="c1">#i=500</span>
+    <span class="n">Config</span><span class="o">.</span><span class="n">CONST_MinimumDistance</span><span class="o">=</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_LengthOfRoad</span><span class="o">/</span><span class="n">i</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_MinimumDistance</span><span class="p">)</span>
+    <span class="n">clock</span><span class="o">=</span><span class="n">Clock</span><span class="p">(</span><span class="o">.</span><span class="mi">05</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+    <span class="n">carLogger</span><span class="o">=</span><span class="n">CriticalDensityCarLogger</span><span class="p">()</span>
+    <span class="n">carFactory</span><span class="o">=</span><span class="n">CarFactory</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">carLogger</span><span class="p">,</span><span class="n">clock</span><span class="p">)</span>
+    <span class="n">carFactory</span><span class="o">.</span><span class="n">startBuilding</span><span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_LengthOfRoad</span><span class="o">/</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">carFactory</span><span class="o">.</span><span class="n">setRandomBreak</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">clock</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">carLogger</span><span class="p">)</span>
+    <span class="n">clock</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="n">carLogger</span><span class="o">.</span><span class="n">finalize</span><span class="p">(</span><span class="n">double</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">/</span><span class="n">Config</span><span class="o">.</span><span class="n">CONST_LengthOfRoad</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">)</span> 
-<span class="kn">from</span> <span class="nn">Logger.DataFileCarLogger</span> <span class="k">import</span> <span class="n">DataFileCarLogger</span>
-<span class="kn">from</span> <span class="nn">Factory.ILoggerFactory</span> <span class="k">import</span> <span class="n">ILoggerFactory</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Model.Car</span> <span class="k">import</span> <span class="n">Car</span>
+<span class="kn">from</span> <span class="nn">Model.Clock</span> <span class="k">import</span> <span class="n">Clock</span>
+<span class="kn">from</span> <span class="nn">Model.Config</span> <span class="k">import</span> <span class="n">Config</span>
+<span class="kn">from</span> <span class="nn">Factory.CarFactory</span> <span class="k">import</span> <span class="n">CarFactory</span>
+<span class="kn">from</span> <span class="nn">Logger.AnimationCarLogger</span> <span class="k">import</span> <span class="n">AnimationCarLogger</span>
 
-<span class="k">class</span> <span class="nc">DataFileCarLoggerFactory</span><span class="p">(</span><span class="n">ILoggerFactory</span><span class="p">):</span>
-    
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span><span class="p">;</span>
-    
-    <span class="k">def</span> <span class="nf">getLogger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">DataFileCarLogger</span><span class="p">()</span>
+
+<span class="n">CONST_MinimumDistance</span><span class="o">=</span><span class="mi">50</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">CONST_MinimumDistance</span><span class="p">)</span>
+<span class="n">clock</span><span class="o">=</span><span class="n">Clock</span><span class="p">(</span><span class="o">.</span><span class="mi">005</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">carLogger</span><span class="o">=</span><span class="n">AnimationCarLogger</span><span class="p">()</span>
+<span class="n">carFactory</span><span class="o">=</span><span class="n">CarFactory</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">carLogger</span><span class="p">,</span><span class="n">clock</span><span class="p">)</span>
+<span class="n">carFactory</span><span class="o">.</span><span class="n">startBuilding</span><span class="p">()</span>
+<span class="n">carFactory</span><span class="o">.</span><span class="n">setRandomBreak</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">clock</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">carLogger</span><span class="p">)</span>
+<span class="n">clock</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">carLogger</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ILoggerFactory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span><span class="p">;</span>
-    
-    <span class="k">def</span> <span class="nf">getLogger</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Model.Car</span> <span class="k">import</span> <span class="n">Car</span>
+<span class="kn">from</span> <span class="nn">Model.Clock</span> <span class="k">import</span> <span class="n">Clock</span>
+<span class="kn">from</span> <span class="nn">Factory.CarFactory</span> <span class="k">import</span> <span class="n">CarFactory</span>
+<span class="kn">from</span> <span class="nn">Logger.DataFileCarLogger</span> <span class="k">import</span> <span class="n">DataFileCarLogger</span>
+
+
+<span class="n">clock</span><span class="o">=</span><span class="n">Clock</span><span class="p">(</span><span class="o">.</span><span class="mi">005</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">carLogger</span><span class="o">=</span><span class="n">DataFileCarLogger</span><span class="p">()</span>
+<span class="n">carFactory</span><span class="o">=</span><span class="n">CarFactory</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="n">carLogger</span><span class="p">,</span><span class="n">clock</span><span class="p">)</span>
+<span class="n">carFactory</span><span class="o">.</span><span class="n">startBuilding</span><span class="p">()</span>
+<span class="n">clock</span><span class="o">.</span><span class="n">addListener</span><span class="p">(</span><span class="n">carLogger</span><span class="p">)</span>
+<span class="n">clock</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">carFactory</span><span class="o">.</span><span class="n">setRandomBreak</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">carLogger</span><span class="o">.</span><span class="n">finalize</span><span class="p">();</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ITimeDependent</span> <span class="k">import</span> <span class="n">ITimeDependent</span>
+<span class="kn">import</span> <span class="nn">matplotlib.animation</span> <span class="k">as</span> <span class="nn">animation</span>
+<span class="kn">import</span> <span class="nn">matplotlib.gridspec</span> <span class="k">as</span> <span class="nn">gridspec</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">Model.Car</span> <span class="k">import</span> <span class="n">Car</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">config</span> <span class="k">import</span> <span class="o">*</span>
+
+<span class="n">fig1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">gs</span> <span class="o">=</span> <span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsteps</span><span class="p">):</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">i</span><span class="o">*</span><span class="n">dt</span><span class="o">/</span><span class="n">pause</span><span class="o">&gt;</span><span class="n">tmpN</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">tmpN</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">)):</span>     <span class="c1">#if puase time elapsed add a car</span>
+        <span class="n">tmpCar</span> <span class="o">=</span> <span class="n">Car</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">t0</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="n">pause</span><span class="p">,</span>
+                     <span class="n">x0</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                     <span class="n">v0</span><span class="o">=</span><span class="n">v0</span><span class="p">[</span><span class="n">tmpN</span><span class="p">],</span>
+                     <span class="n">vf</span><span class="o">=</span><span class="n">vf</span><span class="p">[</span><span class="n">tmpN</span><span class="p">],</span>
+                     <span class="n">dm</span><span class="o">=</span><span class="n">dm</span><span class="p">,</span>
+                     <span class="n">carID</span><span class="o">=</span><span class="n">tmpN</span><span class="p">)</span>
+        <span class="n">cars</span><span class="p">[</span><span class="n">tmpN</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmpCar</span>
+        <span class="n">tmpN</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cars</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tmpN</span><span class="p">):</span>                   <span class="c1"># move all cars in each time step</span>
+        <span class="n">cars</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">cars</span><span class="p">)</span>
+    <span class="n">Car</span><span class="o">.</span><span class="n">animate</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">dt</span><span class="p">,</span><span class="n">cars</span><span class="p">,</span><span class="n">gs</span><span class="p">)</span>                      <span class="c1">#create a frame of animation for each time step</span>
+
+<span class="c1">#line_ani = animation.FuncAnimation(fig1, update_line, 25, fargs=(data, l),</span>
+                                   <span class="c1">#interval=50, blit=True)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">StreetView</span><span class="p">(</span><span class="n">ITimeDependent</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">cars</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cars</span><span class="o">=</span><span class="n">cars</span>
+
+
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">,</span><span class="n">timeStep</span><span class="p">):</span>
         <span class="k">pass</span>
 </pre></div>
 </div>
@@ -290,6 +466,30 @@
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="FunctionsAndClasses.html"
+                        title="previous chapter">Functions and Classes</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ForDevelopers.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
